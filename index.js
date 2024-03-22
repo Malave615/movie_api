@@ -1,6 +1,13 @@
 const express = require('express');
-const app = express();
 const morgan = require('morgan');
+const fs = require('fs');
+const path = require('path');
+
+const app = express();
+
+const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {
+  flags: 'a',
+});
 
 const topTen = [
   {
@@ -45,14 +52,28 @@ const topTen = [
   },
 ];
 
-app.use(morgan('common'));
+app.use(morgan('combined', { stream: accessLogStream }));
 
 app.get('/movies', (req, res) => {
   res.json(topTen);
 });
 
 app.get('/', (req, res) => {
-  res.send('Here is my movie list!');
+  res.send('Welcome to my Movie_API!');
 });
 
 app.use(express.static('public'));
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something went wrong!');
+});
+
+app.listen(8080, () => {
+  console.log('Your movie app is listening on port 8080');
+});
+
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
