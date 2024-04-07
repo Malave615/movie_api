@@ -78,15 +78,15 @@ app.use(morgan('combined', { stream: accessLogStream }));
 
 // READ
 app.get('/movies', (req, res) => {
-  res.status(200).json(movies);
+  res.send('Successful GET request returning data on all movies');
 });
 
 // READ
 app.get('/movies/:title', (req, res) => {
-  res.json(movies.find((movie) => movie.title === req.params.title));
-
-  if (movies) {
-    res.status(200).json(movies);
+  const { title } = req.params;
+  const movie = movies.find((m) => m.title === title);
+  if (movie) {
+    res.status(200).json(movie);
   } else {
     res.status(400).send('no such movie');
   }
@@ -94,10 +94,6 @@ app.get('/movies/:title', (req, res) => {
 
 app.get('/', (req, res) => {
   res.send('Welcome to my Movie API!');
-});
-
-app.get('/movies', (req, res) => {
-  res.send('Successful GET request returning data on all movies');
 });
 
 app.get('/movies/genres/{genreName}', (req, res) => {
@@ -143,11 +139,11 @@ app.use((err, req, res, next) => {
   res.status(500).send('Something went wrong!');
 });
 
-app.listen(8080, () => {
-  console.log('Your movie app is listening on port 8080');
+app.listen(3005, () => {
+  console.log('Your movie app is listening on port 3005');
 });
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 3005;
 app.listen(PORT, () => {
-  console.log(`Server is running on port 8080`);
+  console.log(`Server is running on port 3005`);
 });
