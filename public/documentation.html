@@ -1,172 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DOCUMENTATION</title>
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <title>DOCUMENTATION</title>
+    </head>
 
-<body>
-    <h1>My Movie API</h1>
-    <p>
-        The server-side of this API was built to allow users to get information on different movies, movie genres, directors and actors/actresses. Users can also register, creating a user name and password, as well as allow them to create a list of their favorite movies.
-    </p>
-    <p>
-        Errors are returned with HTTP response code and messages are sent detailing the error/s are included in the response body.
-    </p>
-    <table>
-        <thead>
-            <tr>
-                <th scope="col">Request</th>
-                <th scope="col">URL</th>
-                <th scope="col">HTTP Method</th>
-                <th scope="col">Authorization</th>
-                <th scope="col">Request Body</th>
-                <th scope="col">Response Body</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>User Login</td>
-                <td>/login</td>
-                <td>POST</td>
-                <td>None</td>
-                <td>
-                    A JSON object with a user name and password, structured as follows:
-                    { 'Username': '{username}', 'Password': '{Password}' }
-                </td>
-                <td>
-                    JWT Authentication token <br />
-                     'token': '######' 
-                </td>
-            </tr>
-            <tr>
-                <td>Register a new user</td>
-                <td>/users</td>
-                <td>POST</td>
-                <td>None</td>
-                <td>
-                    A JSON object holding user data to add structured as follows:
-                    { 'Name': 'John Doe",<br />
-                    'Username': '{username}',<br />
-                    'Email': '{email@example.com}',<br />
-                    'Birthday': 'MM-DD-YYYY' }
-                </td>
-                <td>
-                    A JSON object containing data about the user that was added:
-                    { '_id': '######',<br />
-                    'Name': 'John Doe',<br />
-                    'Username': '{username}',<br />
-                    'Email': {email@exapmle.com},<br /> 
-                    'Birthday': 'MM-DD-YYYY',<br />
-                    'token': '######' }
-                </td>
-            </tr>
-            <tr>
-                <td>Get list of all movies</td>
-                <td>/movies</td>
-                <td>GET</td>
-                <td>Required (JWT)</td>
-                <td>None</td>
-                <td>
-                    An array of JSON objects with data about all movies in the database.
-                </td>
-            </tr>
-            <tr>
-                <td>Get data about a movie by title</td>
-                <td>/movies/{Title}</td>
-                <td>GET</td>
-                <td>Required (JWT)</td>
-                <td>None</td>
-                <td>
-                    A JSON object with data about the requested movie structured as followed:
-                     {'_id': '######',<br />
-                    'title': 'Iron Man',<br />
-                    'year': '2008',<br />
-                    'director': 'John Favreau',<br />
-                    'genre': 'action' }
-                </td>
-            </tr>
-            <tr>
-                <td>Get list of movies by genre</td>
-                <td>/movies/genres/{genreName}</td>
-                <td>GET</td>
-                <td>Required (JWT)</td>
-                <td>None</td>
-                <td>
-                    An array of JSON objects with data about all the movies that match the requested genre. 
-                </td>
-            </tr>
-            <tr>
-                <td>Get data about a director by name</td>
-                <td>/movies/directors/{Name}</td>
-                <td>GET</td>
-                <td>Required (JWT)</td>
-                <td>None</td>
-                <td>
-                    A JSON object with data about the requested director structured as followed:
-                    {'_id': '######',<br />
-                    'Name': 'John Favreau',<br />
-                    'Bio': 'John Favreau is an American film director, producer, and screenwriter. He is best known for directing the first two films
-                    'Birth year': '1966',<br />
-                    'Death year': 'N/A' }
-                </td>
-            </tr>
-            <tr>
-                <td>Allow users to add a movie to their favorites list</td>
-                <td>/users/{Username}/movies/{movieID}</td>
-                <td>PUT</td>
-                <td>Required (TWJ)</td>
-                <td>None</td>
-                <td>
-                    A text message indicating whether the movie was successfully added to the user's favorites list.
-                </td>
-            </tr>
-            <tr>
-                <td>Allow users to remove a movie from their fovorites list</td>
-                <td>/users/{Username}/movies/{movieID}</td>
-                <td>DELETE</td>
-                <td>Required (TWJ)</td>
-                <td>None</td>
-                <td>
-                    A text message indicating whether the movie was successfully removed from the user's favorites list.
-                </td>
-            </tr>
-            <tr>
-                <td>Updating user information</td>
-                <td>/users/{Username}</td>
-                <td>PUT</td>
-                <td>Required (TWJ)</td>
-                <td>
-                    A JSON object with data about the user to update structured as follows:
-                    { 'Name': 'John Doe',<br />
-                    'Username': '{username}',<br />
-                    'Email': {email@example.com},<br />
-                    'Birthday': 'MM-DD-YYYY'}
-                </td>
-                <td>
-                    A JSON object with data about the user that was updated, including their assigned id:
-                    { '_id': '######',<br />
-                    'Name': 'John Doe',<br />
-                    'Username': '{username}',<br />
-                    'Email': {email@example.com},<br />
-                    'Birthday': 'MM-DD-YYYY',<br />
-                    'token': '######' }
-                </td>
-            </tr>
-            <tr>
-                <td>Delete User</td>
-                <td>/users/{Username}</td>
-                <td>DELETE</td>
-                <td>Required (TWJ)</td>
-                <td>None</td>
-                <td>
-                    A confirmation stating the user has been deleted.
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</body>
-
+    <body>
+        <h1 class="text-center">My Movie API Documentation</h1>
+        <div class="container">
+            <h2><u>Overview</u></h2>
+            <p>
+                The server-side of this API was built to allow users to get information on different movies, their release year, movie genres and directors. Users can also register, creating a user name and password, as well as create a list of their favorite movies.
+            </p>
+            <p>
+                Errors are returned in the response body with HTTP response codes and messages detailing the error/s.
+            </p>
+            <h2><u>Methods</u></h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col" class="text-center">Request</th>
+                        <th scope="col" class="text-center">URL</th>
+                        <th scope="col" class="text-center">HTTP Method</th>
+                        <th scope="col" class="text-center">Authorization</th>
+                        <th scope="col" class="text-center">Request Body</th>
+                        <th scope="col" class="text-center">Response Body</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="text-center">User Login</td>
+                        <td>/login</td>
+                        <td>POST</td>
+                        <td>None</td>
+                        <td>
+                            A JSON object with a user name and password, structured as follows:
+                            { 'Username': '{username}', 'Password': '{Password}' }
+                        </td>
+                        <td>
+                            JWT Authentication token <br />
+                            'token': '######' 
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">Register a new user</td>
+                        <td>/users</td>
+                        <td>POST</td>
+                        <td>None</td>
+                        <td>
+                            A JSON object holding user data to add structured as follows:
+                            { 'Name': 'John Doe",<br />
+                            'Username': '{username}',<br />
+                            'Email': '{email@example.com}',<br />
+                            'Birthday': 'MM-DD-YYYY' }
+                        </td>
+                        <td>
+                            A JSON object containing data about the user that was added:
+                            { '_id': '######',<br />
+                            'Name': 'John Doe',<br />
+                            'Username': '{username}',<br />
+                            'Email': {email@exapmle.com},<br /> 
+                            'Birthday': 'MM-DD-YYYY',<br />
+                            'token': '######' }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">Get list of all movies</td>
+                        <td>/movies</td>
+                        <td>GET</td>
+                        <td>Required (JWT)</td>
+                        <td>None</td>
+                        <td>
+                            An array of JSON objects with data about all movies in the database.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">Get data about a movie by title</td>
+                        <td>/movies/{Title}</td>
+                        <td>GET</td>
+                        <td>Required (JWT)</td>
+                        <td>None</td>
+                        <td>
+                            A JSON object with data about the requested movie structured as followed:
+                            {'_id': '######',<br />
+                            'title': 'Iron Man',<br />
+                            'year': '2008',<br />
+                            'director': 'John Favreau',<br />
+                            'genre': 'action' }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">Get list of movies by genre</td>
+                        <td>/movies/genres/{genreName}</td>
+                        <td>GET</td>
+                        <td>Required (JWT)</td>
+                        <td>None</td>
+                        <td>
+                            An array of JSON objects with data about all the movies that match the requested genre. 
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">Get data about a director by name</td>
+                        <td>/movies/directors/{Name}</td>
+                        <td>GET</td>
+                        <td>Required (JWT)</td>
+                        <td>None</td>
+                        <td>
+                            A JSON object with data about the requested director structured as followed:
+                            {'_id': '######',<br />
+                            'Name': 'John Favreau',<br />
+                            'Bio': 'John Favreau is an American film director, producer, and screenwriter. He is best known for directing the first two films
+                            'Birth year': '1966',<br />
+                            'Death year': 'N/A' }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">Allow users to add a movie to their favorites list</td>
+                        <td>/users/{Username}/movies/{movieID}</td>
+                        <td>PUT</td>
+                        <td>Required (TWJ)</td>
+                        <td>None</td>
+                        <td>
+                            A text message indicating whether the movie was successfully added to the user's favorites list.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">Allow users to remove a movie from their fovorites list</td>
+                        <td>/users/{Username}/movies/{movieID}</td>
+                        <td>DELETE</td>
+                        <td>Required (TWJ)</td>
+                        <td>None</td>
+                        <td>
+                            A text message indicating whether the movie was successfully removed from the user's favorites list.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">Updating User Information</td>
+                        <td>/users/{Username}</td>
+                        <td>PUT</td>
+                        <td>Required (TWJ)</td>
+                        <td>
+                            A JSON object with data about the user to update structured as follows:
+                            { 'Name': 'John Doe',<br />
+                            'Username': '{username}',<br />
+                            'Email': {email@example.com},<br />
+                            'Birthday': 'MM-DD-YYYY'}
+                        </td>
+                        <td>
+                            A JSON object with data about the user that was updated, including their assigned id:
+                            { '_id': '######',<br />
+                            'Name': 'John Doe',<br />
+                            'Username': '{username}',<br />
+                            'Email': {email@example.com},<br />
+                            'Birthday': 'MM-DD-YYYY',<br />
+                            'token': '######' }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-center">Delete User</td>
+                        <td>/users/{Username}</td>
+                        <td>DELETE</td>
+                        <td>Required (TWJ)</td>
+                        <td>None</td>
+                        <td>
+                            A confirmation stating the user has been deleted.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
 </html>
