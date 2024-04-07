@@ -1,9 +1,11 @@
 const express = require('express');
 const morgan = require('morgan');
+const bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
 
 const app = express();
+app.use(bodyParser.json());
 
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {
   flags: 'a',
@@ -81,11 +83,10 @@ app.get('/movies', (req, res) => {
 
 // READ
 app.get('/movies/:title', (req, res) => {
-  const { title } = req.params;
-  const movie = movies.find((movie) => movie.Title === title);
+  res.json(movies.find((movie) => movie.title === req.params.title));
 
-  if (movie) {
-    res.status(200).json(movie);
+  if (movies) {
+    res.status(200).json(movies);
   } else {
     res.status(400).send('no such movie');
   }
@@ -148,5 +149,5 @@ app.listen(8080, () => {
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on port 8080`);
 });
