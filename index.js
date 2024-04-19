@@ -3,9 +3,10 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
+const uuid = require('uuid');
 
 const app = express();
-app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {
   flags: 'a',
@@ -78,7 +79,7 @@ app.use(morgan('combined', { stream: accessLogStream }));
 
 // READ
 app.get('/movies', (req, res) => {
-  res.send('Successful GET request returning data on all movies');
+  res.status(200).send('Successful GET request returning data on all movies');
 });
 
 // READ
@@ -109,27 +110,39 @@ app.get('/movies/directors/{directorName}', (req, res) => {
 });
 
 app.post('/login', (req, res) => {
+  const newUser = req.body;
+  newUser.id = uuid.v4();
   res.send('Successful POST request returning an authentication token');
 });
 
 app.post('/users', (req, res) => {
-  res.send('Successful POST request returning a confirmation message');
+  res
+    .status(200)
+    .send('Successful POST request returning a confirmation message');
 });
 
 app.put('/users/:username', (req, res) => {
-  res.send('Successful PUT request returning a confirmation message');
+  res
+    .status(200)
+    .send('Successful PUT request returning a confirmation message');
 });
 
 app.delete('/users/:username', (req, res) => {
-  res.send('Successful DELETE request returning a confirmation message');
+  res
+    .status(200)
+    .send('Successful DELETE request returning a confirmation message');
 });
 
 app.put('/users/:username/movies/:movieID', (req, res) => {
-  res.send('Successful PUT request returning a confirmation message');
+  res
+    .status(200)
+    .send('Successful PUT request returning a confirmation message');
 });
 
 app.delete('/users/:username/movies/:movieID', (req, res) => {
-  res.send('Successful DELETE request returning a confirmation message');
+  res
+    .status(200)
+    .send('Successful DELETE request returning a confirmation message');
 });
 
 app.use(express.static('public'));
@@ -139,11 +152,7 @@ app.use((err, req, res, next) => {
   res.status(500).send('Something went wrong!');
 });
 
-app.listen(3005, () => {
-  console.log('Your movie app is listening on port 3005');
-});
-
-const PORT = process.env.PORT || 3005;
-app.listen(PORT, () => {
-  console.log(`Server is running on port 3005`);
+const port = process.env.PORT || 8080;
+app.listen(port, () => {
+  console.log('Your movie app is listening on port 8080');
 });
