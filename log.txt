@@ -1,3 +1,10 @@
 4068 ryder
 ::1 - - [17/Apr/2024:21:33:27 +0000] "GET / HTTP/1.1" 200 24 "-" "PostmanRuntime/7.37.3"
 ::1 - - [17/Apr/2024:21:33:43 +0000] "GET /movies/[Title] HTTP/1.1" 400 13 "-" "PostmanRuntime/7.37.3"
+::1 - - [21/Apr/2024:12:58:35 +0000] "GET /movies HTTP/1.1" 200 51 "-" "PostmanRuntime/7.37.3"
+::1 - - [21/Apr/2024:13:00:48 +0000] "POST /users HTTP/1.1" 200 56 "-" "PostmanRuntime/7.37.3"
+::1 - - [21/Apr/2024:13:00:57 +0000] "POST /users HTTP/1.1" 200 56 "-" "PostmanRuntime/7.37.3"
+::1 - - [21/Apr/2024:13:01:05 +0000] "DELETE /users/[userName]/movies/[Title] HTTP/1.1" 200 58 "-" "PostmanRuntime/7.37.3"
+::1 - - [24/Apr/2024:13:56:06 +0000] "POST /users HTTP/1.1" 200 56 "-" "PostmanRuntime/7.37.3"
+::1 - - [24/Apr/2024:13:56:13 +0000] "DELETE /users/Malave/movies/The%20Godfather HTTP/1.1" 200 58 "-" "PostmanRuntime/7.37.3"
+::1 - - [24/Apr/2024:13:56:29 +0000] "POST /users HTTP/1.1" 200 56 "-" "PostmanRuntime/7.37.3"
