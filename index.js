@@ -28,8 +28,8 @@ mongoose.connect('mongodb://127.0.0.1:27017/test', {
 app.use(morgan('combined', { stream: accessLogStream }));
 
 // Get list of all movies
-app.get('/movies', (req, res) => {
-  Movies.find()
+app.get('/movies', async (req, res) => {
+  await Movies.find()
     .then((movies) => {
       res.status(201).json(movies);
     })
@@ -40,9 +40,9 @@ app.get('/movies', (req, res) => {
 });
 
 // Get a movie by title
-app.get('/movies/:title', (req, res) => {
-  const { title } = req.params;
-  const movie = movies.find((m) => m.title === title);
+app.get('/movies/:title', async (req, res) => {
+  const { title } = req.params.title;
+  const movie = await Movies.findOne({ Title: title });
   if (movie) {
     res.status(200).json(movie);
   } else {
@@ -55,17 +55,28 @@ app.get('/', (req, res) => {
 });
 
 // Get list of movies by genre
-app.get('/movies/genres/{genreName}', (req, res) => {
-  res.send(
-    'Successful GET request returning data on a movies with the corresponding genre',
-  );
+app.get('/movies/genres/{genreName}', async (req, res) => {
+  await Genres.findOne({ Name: req.params.genreName });
+  if (genre) {
+    res.status(201).json(genre.Description);
+  } else {
+    res.status(400).send('no such genre');
+  }
+  catch (err) {
+    console.error(err);
+    res.status(500).send(`Error: ${err}`);
 });
 
 // Get list of movies by director
-app.get('/movies/directors/{directorName}', (req, res) => {
-  res.send(
-    'Successful GET request returning data on movies by the corresponding director',
-  );
+app.get('/movies/directors/:directorName', async (req, res) => {
+  await Movies.findOne({ 'Director.Name': req.params.directorName })
+    .then((movie) => {
+      res.status(201).json(movie.Director);
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send(`Error: ${err}`);
+    });
 });
 
 // Get list of all users
@@ -102,6 +113,7 @@ app.put('/users/:Username', async (req, res) => {
         Password: req.body.Password,
         Email: req.body.Email,
         Birthday: req.body.Birthday,
+        FavoriteMovies: req.body.FavoriteMovies,
       },
     },
     { new: true },
@@ -157,8 +169,7 @@ app.post('/users/:Username/movies/:MovieID', async (req, res) => {
     {
       $push: { FavoriteMovies: req.params.MovieID },
     },
-    { new: true },
-  ) // This line makes sure that the updated document is returned
+    { new: true },) // This line makes sure that the updated document is returned
     .then((updatedUser) => {
       res.json(updatedUser);
     })
