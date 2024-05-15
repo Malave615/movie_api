@@ -13,7 +13,7 @@
         <div class="container">
             <h2><u>Overview</u></h2>
             <p>
-                The server-side of this API was built to allow users to get information on different movies, their release year, movie genres and directors. Users can also register, creating a user name and password, as well as create a list of their favorite movies.
+                The server-side of this API was built to allow users to get information on different movies, including their release year, movie genres and directors. Users can also register, creating a user name and password, as well as create a list of their favorite movies.
             </p>
             <p>
                 Errors are returned in the response body with HTTP response codes and messages detailing the error/s.
@@ -38,7 +38,13 @@
                         <td>None</td>
                         <td>
                             A JSON object with a user name and password, structured as follows:
-                            { 'Username': '{username}', 'Password': '{Password}' }
+                            { 
+                                'Username': '{username}',
+                                'Password': '{Password}',
+                                'Email': '{email}',
+                                'Birthday': 'MM-DD-YYYY',
+                                'FavoriteMovies': []
+                            }
                         </td>
                         <td>
                             JWT Authentication token <br />
@@ -55,7 +61,8 @@
                             { 'Name': 'John Doe',<br />
                             'Username': '{username}',<br />
                             'Email': '{email@example.com}',<br />
-                            'Birthday': 'MM-DD-YYYY' }
+                            'Birthday': 'MM-DD-YYYY',<br />
+                            'FavoriteMovies': [] }
                         </td>
                         <td>
                             A JSON object containing data about the user that was added:
@@ -64,6 +71,7 @@
                             'Username': '{username}',<br />
                             'Email': {email@example.com},<br /> 
                             'Birthday': 'MM-DD-YYYY',<br />
+                            'FavoriteMovies': [],<br />
                             'token': '######' }
                         </td>
                     </tr>
@@ -74,7 +82,22 @@
                         <td>Required (JWT)</td>
                         <td>None</td>
                         <td>
-                            An array of JSON objects with data about all movies in the database.
+                            An array of JSON objects with data about all movies in the database, structured as follows:
+                            { 'Title': '{ type: String, required: true }',
+                              'Description': '{ type: String, required: true }',
+                              'Genre': '{
+                                    Name: String,
+                                    Description: String,
+                                }',
+                              'Director': '{
+                                    Name: String,
+                                    Bio: String,
+                                    Birth: Date,
+                                }',
+                              'Actors': [String],
+                              'ImagePath': String,
+                              'Featured': Boolean,
+                            }
                         </td>
                     </tr>
                     <tr>
