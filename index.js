@@ -55,16 +55,18 @@ app.get('/', (req, res) => {
 });
 
 // Get list of movies by genre
-app.get('/movies/genres/{genreName}', async (req, res) => {
-  await Genres.findOne({ Name: req.params.genreName });
-  if (genre) {
-    res.status(201).json(genre.Description);
-  } else {
-    res.status(400).send('no such genre');
-  }
-  catch (err) {
+app.get('/movies/genres/:genreName', async (req, res) => {
+  try {
+    const genre = await Genres.findOne({ Name: req.params.genreName });
+    if (genre) {
+      res.status(201).json(genre.Description);
+    } else {
+      res.status(400).send('no such genre');
+    }
+  } catch (err) {
     console.error(err);
     res.status(500).send(`Error: ${err}`);
+  }
 });
 
 // Get list of movies by director
@@ -139,7 +141,7 @@ app.post('/users', async (req, res) => {
   await Users.findOne({ Username: req.body.Username })
     .then((user) => {
       if (user) {
-        return res.status(400).send(`${req.body.Username}already exists`);
+        return res.status(400).send(`${req.body.Username} already exists`);
       }
       Users.create({
         Username: req.body.Username,
@@ -169,7 +171,8 @@ app.post('/users/:Username/movies/:MovieID', async (req, res) => {
     {
       $push: { FavoriteMovies: req.params.MovieID },
     },
-    { new: true },) // This line makes sure that the updated document is returned
+    { new: true },
+  ) // This line makes sure that the updated document is returned
     .then((updatedUser) => {
       res.json(updatedUser);
     })
