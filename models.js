@@ -21,7 +21,7 @@ const userSchema = mongoose.Schema({
   Username: { type: String, required: true },
   Password: { type: String, required: true },
   Email: { type: String, required: true },
-  Birthday: Date,
+  Birthday: { Date },
   FavoriteMovies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movie' }],
 });
 
@@ -32,6 +32,7 @@ const genreSchema = mongoose.Schema({
 
 const Movie = mongoose.model('Movie', movieSchema);
 const User = mongoose.model('User', userSchema);
+// eslint-disable-next-line no-unused-vars
 const Genre = mongoose.model('Genre', genreSchema);
 
 module.exports.Movie = Movie;
