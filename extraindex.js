@@ -61,3 +61,33 @@ const movies = [
     genre: 'Family',
   },
 ];
+
+
+
+// Update a user's info, by username
+app.put(
+  '/users/:Username',
+  passport.authenticate('jwt', { session: false }),
+  async (req, res) => {
+    await Users.findOneAndUpdate(
+      { Username: req.params.Username },
+      {
+        $set: {
+          Username: req.body.Username,
+          Password: req.body.Password,
+          Email: req.body.Email,
+          Birthday: req.body.Birthday,
+          FavoriteMovies: req.body.FavoriteMovies,
+        },
+      },
+      { new: true },
+    )
+      .then((updatedUser) => {
+        res.json(updatedUser);
+      })
+      .catch((err) => {
+        console.error(err);
+        res.status(500).send(`Error: ${err}`);
+      });
+  },
+);
