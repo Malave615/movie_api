@@ -22,7 +22,7 @@ const userSchema = mongoose.Schema({
   Password: { type: String, required: true },
   Email: { type: String, required: true },
   Birthday: { Date },
-  FavoriteMovies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movie' }],
+  FavMovies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movie' }],
 });
 
 const genreSchema = mongoose.Schema({
@@ -37,3 +37,4 @@ const Genre = mongoose.model('Genre', genreSchema);
 
 module.exports.Movie = Movie;
 module.exports.User = User;
+module.exports.Genre = Genre;
