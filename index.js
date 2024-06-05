@@ -10,12 +10,16 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const cors = require('cors');
+
+app.use(cors());
+
+const { check, validationResult } = require('express-validator');
+
 const auth = require('./auth')(app);
 const passport = require('passport');
 require('./passport');
 const Models = require('./models.js');
-// Remove the duplicate declaration of 'passport'
-// const passport = require('passport');
 
 const Movies = Models.Movie;
 const Users = Models.User;
@@ -155,31 +159,50 @@ app.post(
 );
 
 // Register a new user
-app.post('/users', async (req, res) => {
-  await Users.findOne({ Username: req.body.Username })
-    .then((user) => {
-      if (user) {
-        return res.status(400).send(`${req.body.Username} already exists`);
-      }
-      Users.create({
-        Username: req.body.Username,
-        Password: req.body.Password,
-        Email: req.body.Email,
-        Birthday: req.body.Birthday,
-      })
-        .then((user) => {
-          res.status(201).json(user);
+app.post(
+  '/users',
+  [
+    check('Username', 'Username is required').isLength({ min: 5 }),
+    check(
+      'Username',
+      'Username contains non alphanumeric characters - not allowed.',
+    ).isAlphanumeric(),
+    check('Password', 'Password is required').not().isEmpty(),
+    check('Email', 'Email does not appear to be valid').isEmail(),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
+
+    const hashedPassword = Users.hashPassword(req.body.Password);
+    await Users.findOne({ Username: req.body.Username })
+      .then((user) => {
+        if (user) {
+          return res.status(400).send(`${req.body.Username} already exists`);
+        }
+        Users.create({
+          Username: req.body.Username,
+          Password: hashedPassword,
+          Email: req.body.Email,
+          Birthday: req.body.Birthday,
         })
-        .catch((error) => {
-          console.error(error);
-          res.status(500).send(`Error: ${error}`);
-        });
-    })
-    .catch((error) => {
-      console.error(error);
-      res.status(500).send(`Error: ${error}`);
-    });
-});
+          .then((user) => {
+            res.status(201).json(user);
+          })
+          .catch((error) => {
+            console.error(error);
+            res.status(500).send(`Error: ${error}`);
+          });
+      })
+      .catch((error) => {
+        console.error(error);
+        res.status(500).send(`Error: ${error}`);
+      });
+  },
+);
 
 // Add a movie to a user's list of favorites
 app.put(
@@ -248,17 +271,32 @@ app.delete(
 // Update a user's info, by username
 app.put(
   '/users/:Username',
+  [
+    check('Username', 'Username is required').isLength({ min: 5 }),
+    check(
+      'Username',
+      'Username contains non alphanumeric characters - -not allowed.',
+    ).isAlphanumeric(),
+    check('Password', 'Password is required').not().isEmpty(),
+    check('Email', 'Email does not appear to be valid').isEmail(),
+  ],
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(422).json({ errors: errors.array() });
+    }
     if (req.user.Username !== req.params.Username) {
       return res.status(400).send('Permission denied');
     }
+    const hashedPassword = Users.hashPassword(req.body.Password);
     await Users.findOneAndUpdate(
       { Username: req.params.Username },
       {
         $set: {
           Username: req.body.Username,
-          Password: req.body.Password,
+          Password: hashedPassword,
           Email: req.body.Email,
           Birthday: req.body.Birthday,
         },
@@ -284,6 +322,6 @@ app.use((err, req, res, next) => {
 });
 
 const port = process.env.PORT || 8080;
-app.listen(port, () => {
-  console.log('Your movie app is listening on port 8080');
+app.listen(port, '0.0.0.0', () => {
+  console.log('Listening on Port ' + port);
 });
