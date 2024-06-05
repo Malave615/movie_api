@@ -31,9 +31,12 @@
   "license": "ISC",
   "description": "My Movie API\r This is a backend, or server side, application for a movie api. It was developed using Node.js and Express. The app provides users with information about different movies, directors and movie genres. It allows users to register an account with a username and password, search for movies by title, genre or director and also allows users to create a list of favorite movies.",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
     "eslint-config-wesbos": "^4.0.1",
     "express": "^4.19.2",
+    "express-validator": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "mongoose": "^8.3.4",
