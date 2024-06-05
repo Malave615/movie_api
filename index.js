@@ -71,7 +71,7 @@ app.get(
   '/movies/genres/:genreName',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
-    await Genres.findOne({ 'Genre.Name': req.params.genreName })
+    await Movies.findOne({ 'Genre.Name': req.params.genreName })
       .then((genre) => {
         res.status(201).json(genre.Genre);
       })
