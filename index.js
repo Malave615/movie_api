@@ -29,7 +29,12 @@ const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {
   flags: 'a',
 });
 
-mongoose.connect('mongodb://127.0.0.1:27017/test', {
+/* mongoose.connect('mongodb://127.0.0.1:27017/test', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});*/
+
+mongoose.connect(process.env.CONNECTION_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
@@ -325,3 +330,6 @@ const port = process.env.PORT || 8080;
 app.listen(port, '0.0.0.0', () => {
   console.log('Listening on Port ' + port);
 });
+
+
+mongoimport --uri mongodb+srv://malavetracy:U9BA79dbj6q2Xj@tracysdb.yixpnup.mongodb.net/myFlixDB --collection movies --type json --file "C:\Users\malav\OneDrive\Documents\myMovieDB.json"
