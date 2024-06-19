@@ -144,13 +144,13 @@ app.post(
   '/login',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
-    const { Username, Password } = req.body;
-    await Users.findOne({ Username })
+    const hashedPassword = Users.hashPassword(req.body.Password);
+    await Users.findOne({ Username: req.body.username })
       .then((user) => {
         if (!user) {
           return res.status(400).send('User not found');
         }
-        if (!user.validatePassword(Password)) {
+        if (!user.validatePassword(hashedPassword)) {
           return res.status(400).send('Incorrect password');
         }
         const token = auth.generateJWT(user);
