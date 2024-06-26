@@ -152,3 +152,5 @@
 ::1 - - [29/May/2024:14:10:17 +0000] "GET /movies/genres/Thriller HTTP/1.1" 400 13 "-" "PostmanRuntime/7.39.0"
 ::1 - - [29/May/2024:21:16:01 +0000] "GET /movies/genres/Thriller HTTP/1.1" 400 13 "-" "PostmanRuntime/7.39.0"
 ::1 - - [29/May/2024:21:16:33 +0000] "GET /movies/genres/Thriller HTTP/1.1" 201 177 "-" "PostmanRuntime/7.39.0"
+127.0.0.1 - - [26/Jun/2024:15:35:37 +0000] "GET /DevMgmt/ProductConfigDyn.xml HTTP/1.1" 404 167 "-" "HP"
+127.0.0.1 - - [26/Jun/2024:15:35:37 +0000] "GET /DevMgmt/DiscoveryTree.xml HTTP/1.1" 404 164 "-" "HP"
