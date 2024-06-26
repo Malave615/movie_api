@@ -52,7 +52,7 @@ app.get(
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     await Movies.find()
-      .then((movies_list) => {
+      .then((movies) => {
         res.status(201).json(Movies);
       })
       .catch((err) => {
@@ -114,7 +114,7 @@ app.get(
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     await Users.find()
-      .then((users_list) => {
+      .then((users) => {
         res.status(201).json(users_list);
       })
       .catch((err) => {
