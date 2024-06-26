@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const express = require('express');
 const morgan = require('morgan');
 const fs = require('fs');
@@ -16,14 +17,14 @@ app.use(cors());
 
 const { check, validationResult } = require('express-validator');
 
-const auth = require('./auth')(app);
 const passport = require('passport');
+const auth = require('./auth')(app);
 require('./passport');
 const Models = require('./models.js');
 
 const Movies = Models.Movie;
 const Users = Models.User;
-const Genres = Models.Genre;
+// const Genres = Models.Genre;
 
 const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {
   flags: 'a',
@@ -51,7 +52,7 @@ app.get(
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     await Movies.find()
-      .then((movies) => {
+      .then((movies_list) => {
         res.status(201).json(Movies);
       })
       .catch((err) => {
@@ -113,8 +114,8 @@ app.get(
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     await Users.find()
-      .then((users) => {
-        res.status(201).json(users);
+      .then((users_list) => {
+        res.status(201).json(users_list);
       })
       .catch((err) => {
         console.error(err);
