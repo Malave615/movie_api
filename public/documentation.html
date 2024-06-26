@@ -53,7 +53,7 @@
                     </tr>
                     <tr>
                         <td class="text-center">Register a new user</td>
-                        <td>/users</td>
+                        <td>/users_list</td>
                         <td>POST</td>
                         <td>None</td>
                         <td>
@@ -77,7 +77,7 @@
                     </tr>
                     <tr>
                         <td class="text-center">Get list of all movies</td>
-                        <td>/movies</td>
+                        <td>/movies_list</td>
                         <td>GET</td>
                         <td>Required (JWT)</td>
                         <td>None</td>
@@ -102,7 +102,7 @@
                     </tr>
                     <tr>
                         <td class="text-center">Get data about a movie by title</td>
-                        <td>/movies/{Title}</td>
+                        <td>/movies_list/{Title}</td>
                         <td>GET</td>
                         <td>Required (JWT)</td>
                         <td>None</td>
@@ -117,7 +117,7 @@
                     </tr>
                     <tr>
                         <td class="text-center">Get data about a genre by name</td>
-                        <td>/movies/genres/{genreName}</td>
+                        <td>/movies_list/genres/{genreName}</td>
                         <td>GET</td>
                         <td>Required (JWT)</td>
                         <td>None</td>
@@ -127,7 +127,7 @@
                     </tr>
                     <tr>
                         <td class="text-center">Get data about a director by name</td>
-                        <td>/movies/directors/{Name}</td>
+                        <td>/movies_list/directors/{Name}</td>
                         <td>GET</td>
                         <td>Required (JWT)</td>
                         <td>None</td>
@@ -142,7 +142,7 @@
                     </tr>
                     <tr>
                         <td class="text-center">Allow users to add a movie to their favorites list</td>
-                        <td>/users/{Username}/movies/{movieID}</td>
+                        <td>/users_list/{Username}/movies_list/{movieID}</td>
                         <td>PUT</td>
                         <td>Required (TWJ)</td>
                         <td>None</td>
@@ -152,7 +152,7 @@
                     </tr>
                     <tr>
                         <td class="text-center">Allow users to remove a movie from their fovorites list</td>
-                        <td>/users/{Username}/movies/{movieID}</td>
+                        <td>/users_list/{Username}/movies_list/{movieID}</td>
                         <td>DELETE</td>
                         <td>Required (TWJ)</td>
                         <td>None</td>
@@ -162,7 +162,7 @@
                     </tr>
                     <tr>
                         <td class="text-center">Updating User Information</td>
-                        <td>/users/{Username}</td>
+                        <td>/users_list/{Username}</td>
                         <td>PUT</td>
                         <td>Required (TWJ)</td>
                         <td>
@@ -184,7 +184,7 @@
                     </tr>
                     <tr>
                         <td class="text-center">Delete User</td>
-                        <td>/users/{Username}</td>
+                        <td>/users_list/{Username}</td>
                         <td>DELETE</td>
                         <td>Required (TWJ)</td>
                         <td>None</td>

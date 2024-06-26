@@ -52,7 +52,7 @@ app.get(
   async (req, res) => {
     await Movies.find()
       .then((movies) => {
-        res.status(201).json(movies);
+        res.status(201).json(Movies);
       })
       .catch((err) => {
         console.error(err);
@@ -63,7 +63,7 @@ app.get(
 
 // Get a movie by title
 app.get(
-  '/movies/:title',
+  '/movies_list/:title',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     const movie = await Movies.findOne({ Title: req.params.title });
@@ -77,7 +77,7 @@ app.get(
 
 // Get data about a genre by name
 app.get(
-  '/movies/genres/:genreName',
+  '/movies_list/genres/:genreName',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     await Movies.findOne({ 'Genre.Name': req.params.genreName })
@@ -93,7 +93,7 @@ app.get(
 
 // Get data about a director by name
 app.get(
-  '/movies/directors/:directorName',
+  '/movies_list/directors/:directorName',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     await Movies.findOne({ 'Director.Name': req.params.directorName })
@@ -109,7 +109,7 @@ app.get(
 
 // Get list of all users
 app.get(
-  '/users',
+  '/users_list',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     await Users.find()
@@ -125,7 +125,7 @@ app.get(
 
 // Get a user by username
 app.get(
-  '/users/:Username',
+  '/users_list/:Username',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     await Users.findOne({ Username: req.params.Username })
@@ -165,7 +165,7 @@ app.post(
 
 // Register a new user
 app.post(
-  '/users',
+  '/users_list',
   [
     check('Username', 'Username is required').isLength({ min: 5 }),
     check(
@@ -211,7 +211,7 @@ app.post(
 
 // Add a movie to a user's list of favorites
 app.put(
-  '/users/:Username/movies/:title',
+  '/users_list/:Username/movies_list/:title',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     await Users.findOneAndUpdate(
@@ -233,7 +233,7 @@ app.put(
 
 // Delete a movie from a user's list of favorites
 app.delete(
-  '/users/:Username/movies/:title',
+  '/users_list/:Username/movies_list/:title',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     await Users.findOneAndUpdate(
@@ -255,7 +255,7 @@ app.delete(
 
 // Delete a user by username
 app.delete(
-  '/users/:Username',
+  '/users_list/:Username',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     await Users.findOneAndRemove({ Username: req.params.Username })
@@ -275,7 +275,7 @@ app.delete(
 
 // Update a user's info, by username
 app.put(
-  '/users/:Username',
+  '/users_list/:Username',
   [
     check('Username', 'Username is required').isLength({ min: 5 }),
     check(
