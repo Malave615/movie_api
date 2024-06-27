@@ -48,12 +48,12 @@ app.get('/', (req, res) => {
 
 // Get list of all movies
 app.get(
-  '/movies_list',
+  '/movies',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     await Movies.find()
       .then((movies) => {
-        res.status(201).json(Movies);
+        res.status(201).json(movies);
       })
       .catch((err) => {
         console.error(err);
@@ -64,7 +64,7 @@ app.get(
 
 // Get a movie by title
 app.get(
-  '/movies_list/:title',
+  '/movies/:title',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     const movie = await Movies.findOne({ Title: req.params.title });
@@ -78,7 +78,7 @@ app.get(
 
 // Get data about a genre by name
 app.get(
-  '/movies_list/genres/:genreName',
+  '/movies/genres/:genreName',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     await Movies.findOne({ 'Genre.Name': req.params.genreName })
@@ -94,7 +94,7 @@ app.get(
 
 // Get data about a director by name
 app.get(
-  '/movies_list/directors/:directorName',
+  '/movies/directors/:directorName',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     await Movies.findOne({ 'Director.Name': req.params.directorName })
@@ -110,12 +110,12 @@ app.get(
 
 // Get list of all users
 app.get(
-  '/users_list',
+  '/users',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     await Users.find()
       .then((users) => {
-        res.status(201).json(users_list);
+        res.status(201).json(users);
       })
       .catch((err) => {
         console.error(err);
@@ -126,7 +126,7 @@ app.get(
 
 // Get a user by username
 app.get(
-  '/users_list/:Username',
+  '/users/:Username',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     await Users.findOne({ Username: req.params.Username })
@@ -166,7 +166,7 @@ app.post(
 
 // Register a new user
 app.post(
-  '/users_list',
+  '/users',
   [
     check('Username', 'Username is required').isLength({ min: 5 }),
     check(
@@ -195,8 +195,8 @@ app.post(
           Email: req.body.Email,
           Birthday: req.body.Birthday,
         })
-          .then((user) => {
-            res.status(201).json(user);
+          .then((data) => {
+            res.status(201).json(data);
           })
           .catch((error) => {
             console.error(error);
@@ -212,7 +212,7 @@ app.post(
 
 // Add a movie to a user's list of favorites
 app.put(
-  '/users_list/:Username/movies_list/:title',
+  '/users/:Username/movies/:title',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     await Users.findOneAndUpdate(
@@ -234,7 +234,7 @@ app.put(
 
 // Delete a movie from a user's list of favorites
 app.delete(
-  '/users_list/:Username/movies_list/:title',
+  '/users/:Username/movies/:title',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     await Users.findOneAndUpdate(
@@ -256,7 +256,7 @@ app.delete(
 
 // Delete a user by username
 app.delete(
-  '/users_list/:Username',
+  '/users/:Username',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     await Users.findOneAndRemove({ Username: req.params.Username })
@@ -276,7 +276,7 @@ app.delete(
 
 // Update a user's info, by username
 app.put(
-  '/users_list/:Username',
+  '/users/:Username',
   [
     check('Username', 'Username is required').isLength({ min: 5 }),
     check(
