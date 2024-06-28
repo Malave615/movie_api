@@ -78,7 +78,7 @@ app.get(
 
 // Get data about a genre by name
 app.get(
-  '/movies/genres/:genreName',
+  '/movies/genre/:genreName',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     await Movies.findOne({ 'Genre.Name': req.params.genreName })
@@ -268,7 +268,7 @@ app.delete(
     if (req.user.Username !== req.params.Username) {
       return res.status(400).send('Permission denied');
     }
-    await Users.findOneAndRemove({ Username: req.params.Username })
+    await Users.findOneAndDelete({ Username: req.params.Username })
       .then((user) => {
         if (!user) {
           res.status(400).send(`${req.params.Username} was not found`);
