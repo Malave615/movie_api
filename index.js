@@ -94,7 +94,7 @@ app.get(
 
 // Get data about a director by name
 app.get(
-  '/movies/directors/:directorName',
+  '/movies/director/:directorName',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     await Movies.findOne({ 'Director.Name': req.params.directorName })
@@ -211,14 +211,17 @@ app.post(
 );
 
 // Add a movie to a user's list of favorites
-app.put(
-  '/users/:Username/movies/:title',
+app.post(
+  '/users/:Username/movies/:MovieID',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
+    if (req.user.Username !== req.params.Username) {
+      return res.status(400).send('Permission denied');
+    }
     await Users.findOneAndUpdate(
       { Username: req.params.Username },
       {
-        $pull: { FavMovies: req.params.title },
+        $push: { FavMovies: req.params.MovieID },
       },
       { new: true },
     ) // This line makes sure that the updated document is returned
@@ -234,13 +237,16 @@ app.put(
 
 // Delete a movie from a user's list of favorites
 app.delete(
-  '/users/:Username/movies/:title',
+  '/users/:Username/movies/:MovieID',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
+    if (req.user.Username !== req.params.Username) {
+      return res.status(400).send('Permission denied');
+    }
     await Users.findOneAndUpdate(
       { Username: req.params.Username },
       {
-        $pull: { FavMovies: req.params.title },
+        $pull: { FavMovies: req.params.MovieID },
       },
       { new: true },
     ) // This line makes sure that the updated document is returned
@@ -259,6 +265,9 @@ app.delete(
   '/users/:Username',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
+    if (req.user.Username !== req.params.Username) {
+      return res.status(400).send('Permission denied');
+    }
     await Users.findOneAndRemove({ Username: req.params.Username })
       .then((user) => {
         if (!user) {
@@ -277,6 +286,7 @@ app.delete(
 // Update a user's info, by username
 app.put(
   '/users/:Username',
+  passport.authenticate('jwt', { session: false }),
   [
     check('Username', 'Username is required').isLength({ min: 5 }),
     check(
@@ -286,7 +296,6 @@ app.put(
     check('Password', 'Password is required').not().isEmpty(),
     check('Email', 'Email does not appear to be valid').isEmail(),
   ],
-  passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     const errors = validationResult(req);
 
@@ -302,7 +311,7 @@ app.put(
       {
         $set: {
           Username: req.body.Username,
-          Password: hashedPassword,
+          Password: req.body.Password,
           Email: req.body.Email,
           Birthday: req.body.Birthday,
         },
