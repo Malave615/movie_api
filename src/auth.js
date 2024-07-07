@@ -4,7 +4,8 @@ require('./passport'); // Your local passport file
 
 const jwtSecret = 'your_jwt_secret'; // This has to be the same key used in the JWTStrategy
 
-const generateJWTToken = (user) => jwt.sign(user, jwtSecret, {
+const generateJWTToken = (user) =>
+  jwt.sign(user, jwtSecret, {
     subject: user.Username, // This is the username you'er encoding in the JWT
     expiresIn: '7d', // This specifies that the token will expire in 7 days
     algorithm: 'HS256', // This is the algorithm used to 'sign' or encode the values of the JWT
