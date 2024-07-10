@@ -12,7 +12,7 @@
     "eslint-plugin-react-hooks": "^4.3.0",
     "nodemon": "^3.1.0"
   },
-  "name": "malav",
+  "name": "movie_api",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
