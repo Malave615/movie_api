@@ -19,7 +19,7 @@ const { check, validationResult } = require('express-validator');
 
 const passport = require('passport');
 const auth = require('./auth')(app);
-require('../passport');
+require('./passport');
 const Models = require('./models.js');
 
 const Movies = Models.Movie;
@@ -82,8 +82,8 @@ app.get(
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     await Movies.findOne({ 'Genre.Name': req.params.genreName })
-      .then((genre) => {
-        res.status(201).json(genre.Genre);
+      .then((movie) => {
+        res.status(201).json(movie.Genre);
       })
       .catch((err) => {
         console.error(err);
