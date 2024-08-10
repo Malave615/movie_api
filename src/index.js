@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 const express = require('express');
 const morgan = require('morgan');
 const fs = require('fs');
@@ -18,20 +19,20 @@ const { check, validationResult } = require('express-validator');
 
 const passport = require('passport');
 const auth = require('./auth')(app);
-require('./passport');
+require('../passport');
 const Models = require('./models.js');
 
 const Movies = Models.Movie;
 const Users = Models.User;
 // const Genres = Models.Genre;
 
-const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.text'), {
+const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {
   flags: 'a',
 });
 
-/* mongoose.connect('mongodb://127.0.0.1:27017/test), {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+/* mongoose.connect('mongodb://127.0.0.1:27017/test', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 }); */
 
 mongoose.connect(process.env.CONNECTION_URI, {
@@ -181,6 +182,7 @@ app.post(
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() });
     }
+
     const hashedPassword = Users.hashPassword(req.body.Password);
     await Users.findOne({ Username: req.body.Username })
       .then((user) => {
