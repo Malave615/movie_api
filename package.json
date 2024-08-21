@@ -14,12 +14,11 @@
   },
   "name": "movie_api",
   "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
+    "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
   },
   "eslintConfig": {
     "extends": [

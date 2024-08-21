@@ -19,7 +19,7 @@ const { check, validationResult } = require('express-validator');
 
 const passport = require('passport');
 const auth = require('./auth')(app);
-require('../passport');
+require('./passport');
 const Models = require('./models.js');
 
 const Movies = Models.Movie;
