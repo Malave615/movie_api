@@ -1,0 +1,2 @@
+192.168.0.194 - - [16/Aug/2024:18:15:45 +0000] "GET / HTTP/1.1" 200 24 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36"
+192.168.0.194 - - [16/Aug/2024:18:15:46 +0000] "GET /favicon.ico HTTP/1.1" 404 150 "http://192.168.0.194:8080/" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36"

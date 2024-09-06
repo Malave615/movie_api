@@ -13,7 +13,20 @@ app.use(express.urlencoded({ extended: true }));
 
 const cors = require('cors');
 
-app.use(cors());
+const allowedOrigins = ['http://localhost:8080', 'http://testsite.com'];
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1) {
+        // If a specific origin isn't found on the list of allowed origins
+        const message = `The CORS policy for this application does not allow access from origin ${origin}`;
+        return callback(new Error(message), false);
+      }
+      return callback(null, true);
+    },
+  }),
+);
 
 const { check, validationResult } = require('express-validator');
 
@@ -30,15 +43,15 @@ const accessLogStream = fs.createWriteStream(path.join(__dirname, 'log.txt'), {
   flags: 'a',
 });
 
-/* mongoose.connect('mongodb://127.0.0.1:27017/test', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-}); */
-
-mongoose.connect(process.env.CONNECTION_URI, {
+mongoose.connect('mongodb://127.0.0.1:27017/test', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+
+/* mongoose.connect(process.env.CONNECTION_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+}); */
 
 app.use(morgan('combined', { stream: accessLogStream }));
 
@@ -49,7 +62,7 @@ app.get('/', (req, res) => {
 // Get list of all movies
 app.get(
   '/movies',
-  // passport.authenticate('jwt', { session: false }),
+  passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     await Movies.find()
       .then((movies) => {
@@ -167,6 +180,7 @@ app.post(
 // Register a new user
 app.post(
   '/users',
+  // Validation logic for request
   [
     check('Username', 'Username is required').isLength({ min: 5 }),
     check(
@@ -177,6 +191,7 @@ app.post(
     check('Email', 'Email does not appear to be valid').isEmail(),
   ],
   async (req, res) => {
+    // Check the validation object for errors
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -298,13 +313,14 @@ app.put(
   ],
   async (req, res) => {
     const errors = validationResult(req);
-
+    // Condition to check added here
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() });
     }
     if (req.user.Username !== req.params.Username) {
       return res.status(400).send('Permission denied');
     }
+    // Condition ends here
     const hashedPassword = Users.hashPassword(req.body.Password);
     await Users.findOneAndUpdate(
       { Username: req.params.Username },
