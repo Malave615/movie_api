@@ -302,6 +302,7 @@ app.delete(
 app.put(
   '/users/:Username',
   passport.authenticate('jwt', { session: false }),
+  // Validation logic for request
   [
     check('Username', 'Username is required').isLength({ min: 5 }),
     check(
