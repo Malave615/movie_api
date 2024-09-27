@@ -17,7 +17,7 @@ const allowedOrigins = [
   'http://localhost:8080',
   'http://testsite.com',
   'http://localhost:1234',
-  'https://malavemovies.netlify.app/',
+  'https://main--malavemovies.netlify.app/',
 ];
 app.use(
   cors({
