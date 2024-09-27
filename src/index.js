@@ -13,6 +13,13 @@ app.use(express.urlencoded({ extended: true }));
 
 const cors = require('cors');
 
+const allowedOrigins = [
+  'http://localhost:8080',
+  'http://testsite.com',
+  'http://localhost:1234',
+  'https://main--malavemovies.netlify.app/',
+];
+
 const corsOptions = {
   origin: (origin, callback) => {
     if (!origin) return callback(null, true);
@@ -31,12 +38,6 @@ app.use(cors(corsOptions));
 // Allow preflight for all routes
 app.options('*', cors());
 
-const allowedOrigins = [
-  'http://localhost:8080',
-  'http://testsite.com',
-  'http://localhost:1234',
-  'https://main--malavemovies.netlify.app/',
-];
 app.use(
   cors({
     origin: (origin, callback) => {
