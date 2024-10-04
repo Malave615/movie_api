@@ -17,24 +17,24 @@ const allowedOrigins = [
   'http://localhost:8080',
   'http://testsite.com',
   'http://localhost:1234',
-  'https://main--malavemovies.netlify.app/',
+  'https://main--malavemovies.netlify.app',
+  'https://malavemovies.netlify.app', // Make sure there's not trailing slash at the end
 ];
 
 const corsOptions = {
   origin: (origin, callback) => {
-    if (!origin) return callback(null, true);
+    if (!origin) return callback(null, true); // Allows requests with no origin (like mobile apps or curl requests)
     if (allowedOrigins.indexOf(origin) === -1) {
       const message = `The CORS policy for this application does not allow access from origin ${origin}`;
-      return callback(new ErrorEvent(message), false);
+      return callback(new Error(message), false);
     }
     return callback(null, true);
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true,
 };
-
+// Use CORS middleware globally
 app.use(cors(corsOptions));
-
 // Allow preflight for all routes
 app.options('*', cors());
 
