@@ -17,6 +17,7 @@ const allowedOrigins = [
   'http://localhost:8080',
   'http://testsite.com',
   'http://localhost:1234',
+  'http://localhost:4200'
   'https://main--malavemovies.netlify.app',
   'https://malavemovies.netlify.app', // Make sure there's not trailing slash at the end
 ];
