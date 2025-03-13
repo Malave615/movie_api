@@ -37,21 +37,7 @@ const corsOptions = {
 // Use CORS middleware globally
 app.use(cors(corsOptions));
 // Allow preflight for all routes
-app.options('*', cors());
-
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) === -1) {
-        // If a specific origin isn't found on the list of allowed origins
-        const message = `The CORS policy for this application does not allow access from origin ${origin}`;
-        return callback(new Error(message), false);
-      }
-      return callback(null, true);
-    },
-  }),
-);
+app.options('*', cors(corsOptions));
 
 const { check, validationResult } = require('express-validator');
 
@@ -181,24 +167,15 @@ app.get(
 // User login
 app.post(
   '/login',
-  passport.authenticate('jwt', { session: false }),
+  passport.authenticate('local', { session: false }),
   async (req, res) => {
-    const hashedPassword = Users.hashPassword(req.body.Password);
-    await Users.findOne({ Username: req.body.username })
-      .then((user) => {
-        if (!user) {
-          return res.status(400).send('User not found');
-        }
-        if (!user.validatePassword(hashedPassword)) {
-          return res.status(400).send('Incorrect password');
-        }
-        const token = auth.generateJWT(user);
-        return res.status(201).json({ token, user: user.Username });
-      })
-      .catch((err) => {
-        console.error(err);
-        res.status(500).send(`Error: ${err}`);
-      });
+    try {
+      const token = auth.generateJWT(req.user);
+      return res.status(201).json({ user: req.user, token });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send(`Error: ${err}`);
+    }
   },
 );
 
