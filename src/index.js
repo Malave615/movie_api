@@ -22,6 +22,14 @@ const allowedOrigins = [
   'https://malavemovies.netlify.app', // Make sure there's not trailing slash at the end
 ];
 
+// Custom CORS middleware
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
+
 const corsOptions = {
   origin: (origin, callback) => {
     if (!origin) return callback(null, true); // Allows requests with no origin (like mobile apps or curl requests)
@@ -37,7 +45,7 @@ const corsOptions = {
 // Use CORS middleware globally
 app.use(cors(corsOptions));
 // Allow preflight for all routes
-app.options('*', cors(corsOptions));
+app.options('/movies', cors(corsOptions));
 
 const { check, validationResult } = require('express-validator');
 
@@ -75,14 +83,13 @@ app.get(
   '/movies',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
-    await Movies.find()
-      .then((movies) => {
-        res.status(201).json(movies);
-      })
-      .catch((err) => {
-        console.error(err);
-        res.status(500).send(`Error: ${err}`);
-      });
+    try {
+      const movies = await Movies.find();
+      res.status(201).json(movies);
+    } catch (err) {
+      console.error('Error fetching movies:', err);
+      res.status(500).send(`Error: ${err}`);
+    }
   },
 );
 
