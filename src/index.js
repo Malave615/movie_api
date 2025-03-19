@@ -207,12 +207,16 @@ app.post(
       return res.status(422).json({ errors: errors.array() });
     }
 
+    // Hash the password
     const hashedPassword = Users.hashPassword(req.body.Password);
+    // Check if the username already exists
     await Users.findOne({ Username: req.body.Username })
       .then((user) => {
         if (user) {
           return res.status(400).send(`${req.body.Username} already exists`);
         }
+
+        // Create a new user with provided data
         Users.create({
           Username: req.body.Username,
           Password: hashedPassword,
