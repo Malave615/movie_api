@@ -20,7 +20,7 @@ const allowedOrigins = [
   'http://localhost:4200',
   'https://main--malavemovies.netlify.app',
   'https://malavemovies.netlify.app',
-  'https://Malave615.github.io',
+  'https://malave615.github.io',
 ];
 
 /**
