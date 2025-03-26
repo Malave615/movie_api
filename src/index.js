@@ -23,7 +23,16 @@ const allowedOrigins = [
   'https://Malave615.github.io',
 ];
 
-// Custom CORS middleware
+/**
+ * Custom CORS middleware
+ * @param {Object} req - Request object
+ * @param {Object} res - Response object
+ * @param {Function} next - Next function
+ * @returns {void}
+ * @description This middleware function adds CORS headers to the response object
+ * allowing requests from any origin with the specified methods and headers.
+ * It also allows preflight requests for all routes.
+ */
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
@@ -33,7 +42,7 @@ app.use((req, res, next) => {
 
 const corsOptions = {
   origin: (origin, callback) => {
-    if (!origin) return callback(null, true); // Allows requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
     if (allowedOrigins.indexOf(origin) === -1) {
       const message = `The CORS policy for this application does not allow access from origin ${origin}`;
       return callback(new Error(message), false);
@@ -43,9 +52,7 @@ const corsOptions = {
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true,
 };
-// Use CORS middleware globally
 app.use(cors(corsOptions));
-// Allow preflight for all routes
 app.options('/movies', cors(corsOptions));
 
 const { check, validationResult } = require('express-validator');
@@ -79,7 +86,16 @@ app.get('/', (req, res) => {
   res.send('Welcome to my Movie API!');
 });
 
-// Get list of all movies
+/**
+ * Get list of all movies
+ * @method GET
+ * @param {string} path - /movies
+ * @param {Function} middleware - passport.authenticate('jwt', { session: false })
+ * @param {Function} callback - async (req, res)
+ * @returns {Object} - JSON object with list of all movies
+ * @description This function gets a list of all movies from the database
+ * and returns them as a JSON object.
+ */
 app.get(
   '/movies',
   passport.authenticate('jwt', { session: false }),
@@ -94,7 +110,16 @@ app.get(
   },
 );
 
-// Get a movie by title
+/**
+ * Get a movie by title
+ * @method GET
+ * @param {string} path - /movies/:title
+ * @param {Function} middleware - passport.authenticate('jwt', { session: false })
+ * @param {Function} callback - async (req, res)
+ * @returns {Object} - JSON object with movie data
+ * @description This function gets a movie by title from the database
+ * and returns it as a JSON object.
+ */
 app.get(
   '/movies/:title',
   passport.authenticate('jwt', { session: false }),
@@ -108,7 +133,16 @@ app.get(
   },
 );
 
-// Get data about a genre by name
+/**
+ * Get data about a genre by name
+ * @method GET
+ * @param {string} path - /movies/genre/:genreName
+ * @param {Function} middleware - passport.authenticate('jwt', { session: false })
+ * @param {Function} callback - async (req, res)
+ * @returns {Object} - JSON object with genre data
+ * @description This function gets data about a genre by name from the database
+ * and returns it as a JSON object.
+ */
 app.get(
   '/movies/genre/:genreName',
   passport.authenticate('jwt', { session: false }),
@@ -124,7 +158,16 @@ app.get(
   },
 );
 
-// Get data about a director by name
+/**
+ * Get data about a director by name
+ * @method GET
+ * @param {string} path - /movies/director/:directorName
+ * @param {Function} middleware - passport.authenticate('jwt', { session: false })
+ * @param {Function} callback - async (req, res)
+ * @returns {Object} - JSON object with director data
+ * @description This function gets data about a director by name from the database
+ * and returns it as a JSON object.
+ */
 app.get(
   '/movies/director/:directorName',
   passport.authenticate('jwt', { session: false }),
@@ -140,7 +183,16 @@ app.get(
   },
 );
 
-// Get list of all users
+/**
+ * Get list of all users
+ * @method GET
+ * @param {string} path - /users
+ * @param {Function} middleware - passport.authenticate('jwt', { session: false })
+ * @param {Function} callback - async (req, res)
+ * @returns {Object} - JSON object with list of all users
+ * @description This function gets a list of all users from the database
+ * and returns them as a JSON object.
+ */
 app.get(
   '/users',
   passport.authenticate('jwt', { session: false }),
@@ -156,7 +208,16 @@ app.get(
   },
 );
 
-// Get a user by username
+/**
+ * Get a user by username
+ * @method GET
+ * @param {string} path - /users/:Username
+ * @param {Function} middleware - passport.authenticate('jwt', { session: false })
+ * @param {Function} callback - async (req, res)
+ * @returns {Object} - JSON object with user data
+ * @description This function gets a user by username from the database
+ * and returns it as a JSON object.
+ */
 app.get(
   '/users/:Username',
   passport.authenticate('jwt', { session: false }),
@@ -172,7 +233,30 @@ app.get(
   },
 );
 
-// User login
+/**
+ * User login
+ * @method POST
+ * @param {string} path - /login
+ * @param {Function} middleware - passport.authenticate('local', { session: false })
+ * @param {Function} callback - async (req, res)
+ * @returns {Object} - JSON object with user data and token
+ * @description This function logs in a user and returns a JSON object with user data and token.
+ * If the user is not found, it returns a 401 status code.
+ * If there is an error, it returns a 500 status code.
+ * If the user is found, it returns a 201 status code.
+ * If the password is incorrect, it returns a 401 status code.
+ * If the username is incorrect, it returns a 401 status code.
+ * If the login is successful, it returns a 201 status code.
+ * If there is an error, it returns a 500 status code.
+ * If the login is successful, it returns a 201 status code.
+ * If there is an error, it returns a 500 status code.
+ * If the login is successful, it returns a 201 status code.
+ * If there is an error, it returns a 500 status code.
+ * If the login is successful, it returns a 201 status code.
+ * If there is an error, it returns a 500 status code.
+ * If the login is successful, it returns a 201 status code.
+ * If there is an error, it returns a 500 status code.
+ */
 app.post(
   '/login',
   passport.authenticate('local', { session: false }),
@@ -187,10 +271,25 @@ app.post(
   },
 );
 
-// Register a new user
+/**
+ * Register a new user
+ * @method POST
+ * @param {string} path - /users
+ * @param {Function} middleware - express-validator
+ * @param {Function} callback - async (req, res)
+ * @returns {Object} - JSON object with user data
+ * @description This function registers a new user and returns a JSON object with user data.
+ * If the username already exists, it returns a 400 status code.
+ * If there is an error, it returns a 500 status code.
+ * If the user is created, it returns a 201 status code.
+ * Validation logic for request
+ * Check the validation object for errors
+ * Hash the password
+ * Check if the username already exists
+ * Create a new user with provided data
+ */
 app.post(
   '/users',
-  // Validation logic for request
   [
     check('Username', 'Username is required').isLength({ min: 5 }),
     check(
@@ -201,23 +300,18 @@ app.post(
     check('Email', 'Email does not appear to be valid').isEmail(),
   ],
   async (req, res) => {
-    // Check the validation object for errors
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() });
     }
 
-    // Hash the password
     const hashedPassword = Users.hashPassword(req.body.Password);
-    // Check if the username already exists
     await Users.findOne({ Username: req.body.Username })
       .then((user) => {
         if (user) {
           return res.status(400).send(`${req.body.Username} already exists`);
         }
-
-        // Create a new user with provided data
         Users.create({
           Username: req.body.Username,
           Password: hashedPassword,
@@ -239,7 +333,16 @@ app.post(
   },
 );
 
-// Add a movie to a user's list of favorites
+/**
+ * Add a movie to a user's list of favorites
+ * @method POST
+ * @param {string} path - /users/:Username/movies/:MovieID
+ * @param {Function} middleware - passport.authenticate('jwt', { session: false })
+ * @param {Function} callback - async (req, res)
+ * @returns {Object} - JSON object with updated user data
+ * @description This function adds a movie to a user's list of favorites and returns a JSON object with updated user data.
+ * Make sure the updated document is returned
+ */
 app.post(
   '/users/:Username/movies/:MovieID',
   passport.authenticate('jwt', { session: false }),
@@ -253,7 +356,7 @@ app.post(
         $push: { FavMovies: req.params.MovieID },
       },
       { new: true },
-    ) // This line makes sure that the updated document is returned
+    )
       .then((updatedUser) => {
         res.json(updatedUser);
       })
@@ -264,7 +367,16 @@ app.post(
   },
 );
 
-// Delete a movie from a user's list of favorites
+/**
+ * Delete a movie from a user's list of favorites
+ * @method DELETE
+ * @param {string} path - /users/:Username/movies/:MovieID
+ * @param {Function} middleware - passport.authenticate('jwt', { session: false })
+ * @param {Function} callback - async (req, res)
+ * @returns {Object} - JSON object with updated user data
+ * @description This function deletes a movie from a user's list of favorites and returns a JSON object with updated user data.
+ * This line makes sure that the updated document is returned
+ */
 app.delete(
   '/users/:Username/movies/:MovieID',
   passport.authenticate('jwt', { session: false }),
@@ -278,7 +390,7 @@ app.delete(
         $pull: { FavMovies: req.params.MovieID },
       },
       { new: true },
-    ) // This line makes sure that the updated document is returned
+    )
       .then((updatedUser) => {
         res.json(updatedUser);
       })
@@ -289,7 +401,15 @@ app.delete(
   },
 );
 
-// Delete a user by username
+/**
+ * Delete a user by username
+ * @method DELETE
+ * @param {string} path - /users/:Username
+ * @param {Function} middleware - passport.authenticate('jwt', { session: false })
+ * @param {Function} callback - async (req, res)
+ * @returns {Object} - JSON object with message
+ * @description This function deletes a user by username and returns a JSON object with a message.
+ */
 app.delete(
   '/users/:Username',
   passport.authenticate('jwt', { session: false }),
@@ -312,11 +432,23 @@ app.delete(
   },
 );
 
-// Update a user's info, by username
+/**
+ * Update a user's info, by username
+ * @method PUT
+ * @param {string} path - /users/:Username
+ * @param {Function} middleware - passport.authenticate('jwt', { session: false })
+ * @param {Function} callback - async (req, res)
+ * @returns {Object} - JSON object with updated user data
+ * @description This function updates a user's info by username and returns a JSON object with updated user data.
+ * This line makes sure that the updated document is returned
+ * Validation logic for request
+ * Check the validation object for errors
+ * Condition to check added here
+ * End the condition
+ */
 app.put(
   '/users/:Username',
   passport.authenticate('jwt', { session: false }),
-  // Validation logic for request
   [
     check('Username', 'Username is required').isLength({ min: 5 }),
     check(
@@ -328,14 +460,12 @@ app.put(
   ],
   async (req, res) => {
     const errors = validationResult(req);
-    // Condition to check added here
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() });
     }
     if (req.user.Username !== req.params.Username) {
       return res.status(400).send('Permission denied');
     }
-    // Condition ends here
     const hashedPassword = Users.hashPassword(req.body.Password);
     await Users.findOneAndUpdate(
       { Username: req.params.Username },
@@ -348,7 +478,7 @@ app.put(
         },
       },
       { new: true },
-    ) // This line makes sure that the updated document is returned
+    )
       .then((updatedUser) => {
         res.json(updatedUser);
       })
@@ -361,7 +491,6 @@ app.put(
 
 app.use(express.static('public'));
 
-// Error handling middleware function
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send('Something went wrong!');
