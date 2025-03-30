@@ -463,29 +463,33 @@ app.put(
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() });
     }
+
     if (req.user.Username !== req.params.Username) {
       return res.status(400).send('Permission denied');
     }
-    const hashedPassword = Users.hashPassword(req.body.Password);
-    await Users.findOneAndUpdate(
-      { Username: req.params.Username },
-      {
-        $set: {
-          Username: req.body.Username,
-          Password: req.body.Password,
-          Email: req.body.Email,
-          Birthday: req.body.Birthday,
-        },
-      },
-      { new: true },
-    )
-      .then((updatedUser) => {
-        res.json(updatedUser);
-      })
-      .catch((err) => {
-        console.log(err);
-        res.status(500).send(`Error: ${err}`);
-      });
+
+    const updatedFields = {
+      Username: req.body.Username,
+      Email: req.body.Email,
+      Birthday: req.body.Birthday,
+    };
+
+    if (req.body.Password) {
+      updatedFields.Password = Users.hashPassword(req.body.Password);
+    }
+
+    try {
+      const updatedUser = await Users.findOneAndUpdate(
+        { Username: req.params.Username },
+        { $set: updatedFields },
+        { new: true },
+      );
+
+      res.json(updatedUser);
+    } catch (err) {
+      console.error(err);
+      res.status(500).send(`Error: ${err}`);
+    }
   },
 );
 
