@@ -26,10 +26,15 @@ const userSchema = mongoose.Schema({
   FavMovies: { type: [String], default: [] }, // Array of movie IDs or titles
 });
 
-userSchema.statics.hashPassword = (password) => bcrypt.hashSync(password, 10);
+userSchema.pre('save', async function (next) {
+  if (this.isModified('Password')) {
+    this.Password = await bcrypt.hash(this.Password, 10);
+  }
+  next();
+});
 
-userSchema.methods.validatePassword = function (password) {
-  return bcrypt.compareSync(password, this.Password);
+userSchema.methods.validatePassword = async function (password) {
+  return bcrypt.compare(password, this.Password);
 };
 
 const genreSchema = mongoose.Schema({
