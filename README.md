@@ -25,7 +25,7 @@ The app provides users with information about different movies, directors and mo
   - **Movies by Genre:** Get a list of movies that match a particular genre.
   - **Movie Actors:** See which actors appear in each movie.
 
-- ** Directors:**
+- **Directors:**
 
   - **Director details:** Retrieve information about a movie director, including biography and birth year.
 
