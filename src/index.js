@@ -475,7 +475,13 @@ app.put(
     };
 
     if (req.body.Password) {
-      updatedFields.Password = Users.hashPassword(req.body.Password);
+      try {
+        await req.user.updatePassword(req.body.Password);
+        updatedFields.Password = req.user.Password;
+      } catch (error) {
+        console.error(error);
+        return res.status(500).send(`Error updating password: ${error}`);
+      }
     }
 
     try {

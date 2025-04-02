@@ -37,6 +37,12 @@ userSchema.methods.validatePassword = async function (password) {
   return bcrypt.compare(password, this.Password);
 };
 
+userSchema.methods.updatePassword = async function (newPassword) {
+  if (newPassword) {
+    this.Password = await bcrypt.hash(newPassword, 10);
+  }
+};
+
 const genreSchema = mongoose.Schema({
   Name: { type: String, required: true },
   Description: { type: String, required: true },
