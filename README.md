@@ -18,16 +18,20 @@ The app provides users with information about different movies, directors and mo
 
 ## Features
 
-Feature #1: Return a list of all movies to the user
-Feature #2: Return data (description, genre, director, image) about a single movie by title to the user
-Feature #3: Return data about a genre (description) by the name/title
-Feature #4: Return data about a director (bio, birth year) by name
-Feature #5: Allow users to see which actors are in each movie
-Feature #6: Allow new users to register
-Feature #7: Allow users to update their user info
-Feature #8: Allow users to add a movie to their list of favorites
-Feature #9: Allow users to remove a movie from their list of favorites
-Feature #10: Allow exisiting users to deregister
+- **Movies:**
+
+  - **List all movies:** Returns a list of all available movies.
+  - **Movie details by title:** Fetch detailed information about a movie, including description, genre, and director, by it's title.
+  - **Movies by Genre:** Get a list of movies that match a particular genre.
+  - **Movie Actors:** See which actors appear in each movie.
+
+- ** Directors:**
+
+  - **Director details:** Retrieve information about a movie director, including biography and birth year.
+
+- **User Management:**
+  - **Add movie to favorites:** Users can add a movie to their favorites list.
+  - **Remove movie from favorites:** Users can remove a movie from their favorites list.
 
 ## Project Dependecies
 
@@ -146,4 +150,5 @@ All endpoints tested using Postman.
 ## Author
 
 Tracy Malavé
-[Github Profile](https://github.com/Malave615)
+[Github Profile]
+(https://github.com/Malave615)
