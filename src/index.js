@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+require('dotenv').config();
 const express = require('express');
 const morgan = require('morgan');
 const fs = require('fs');
@@ -33,12 +34,12 @@ const allowedOrigins = [
  * allowing requests from any origin with the specified methods and headers.
  * It also allows preflight requests for all routes.
  */
-app.use((req, res, next) => {
+/* app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
-});
+}); */
 
 const corsOptions = {
   origin: (origin, callback) => {
@@ -102,7 +103,7 @@ app.get(
   async (req, res) => {
     try {
       const movies = await Movies.find();
-      res.status(201).json(movies);
+      res.status(200).json(movies);
     } catch (err) {
       console.error('Error fetching movies:', err);
       res.status(500).send(`Error: ${err}`);
@@ -149,7 +150,7 @@ app.get(
   async (req, res) => {
     await Movies.findOne({ 'Genre.Name': req.params.genreName })
       .then((genre) => {
-        res.status(201).json(genre.Genre);
+        res.status(200).json(genre.Genre);
       })
       .catch((err) => {
         console.error(err);
@@ -174,7 +175,7 @@ app.get(
   async (req, res) => {
     await Movies.findOne({ 'Director.Name': req.params.directorName })
       .then((movie) => {
-        res.status(201).json(movie.Director);
+        res.status(200).json(movie.Director);
       })
       .catch((err) => {
         console.error(err);
@@ -199,7 +200,7 @@ app.get(
   async (req, res) => {
     await Users.find()
       .then((users) => {
-        res.status(201).json(users);
+        res.status(200).json(users);
       })
       .catch((err) => {
         console.error(err);
@@ -246,14 +247,6 @@ app.get(
  * If the user is found, it returns a 201 status code.
  * If the password is incorrect, it returns a 401 status code.
  * If the username is incorrect, it returns a 401 status code.
- * If the login is successful, it returns a 201 status code.
- * If there is an error, it returns a 500 status code.
- * If the login is successful, it returns a 201 status code.
- * If there is an error, it returns a 500 status code.
- * If the login is successful, it returns a 201 status code.
- * If there is an error, it returns a 500 status code.
- * If the login is successful, it returns a 201 status code.
- * If there is an error, it returns a 500 status code.
  * If the login is successful, it returns a 201 status code.
  * If there is an error, it returns a 500 status code.
  */
@@ -472,7 +465,7 @@ app.put(
       {
         $set: {
           Username: req.body.Username,
-          Password: req.body.Password,
+          Password: hashedPassword,
           Email: req.body.Email,
           Birthday: req.body.Birthday,
         },
