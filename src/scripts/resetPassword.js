@@ -1,18 +1,21 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-const Models = require('../models.js');
+const Models = require('../models');
 
-const { Users } = Models;
+const { User } = Models;
 
 const MONGO_URI = process.env.CONNECTION_URI;
 
 (async () => {
   try {
     console.log(' Connecting to MongoDB...');
-    await mongoose.connect(MONGO_URI);
+    await mongoose.connect(MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
 
-    const user = await Users.findOne({ Username: 'Mushroom' });
+    const user = await User.findOne({ Username: 'Mushroom' });
     if (!user) {
       console.error('X "Mushroom" not found in DB');
       process.exit();

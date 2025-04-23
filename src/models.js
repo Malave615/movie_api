@@ -23,7 +23,9 @@ const userSchema = mongoose.Schema({
   Password: { type: String, required: true },
   Email: { type: String, required: true },
   Birthday: { type: Date, required: true },
-  FavMovies: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Movie' }], // Array of movie IDs or titles
+  FavMovies: [
+    { type: mongoose.Schema.Types.ObjectId, ref: 'Movie', default: [] },
+  ], // Array of movie IDs or titles
 });
 
 userSchema.statics.hashPassword = (password) => bcrypt.hashSync(password, 10);
