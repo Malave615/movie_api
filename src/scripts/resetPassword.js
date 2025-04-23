@@ -1,30 +1,31 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 const Models = require('../models.js');
 
 const { Users } = Models;
-const NEW_PLAIN_PASSWORD = 'Almost!';
 
-async function reset() {
+const MONGO_URI = process.env.CONNECTION_URI;
+
+(async () => {
   try {
-    await mongoose.connect(process.env.CONNECTION_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    console.log(' Connecting to MongoDB...');
+    await mongoose.connect(MONGO_URI);
 
     const user = await Users.findOne({ Username: 'Mushroom' });
     if (!user) {
       console.error('X "Mushroom" not found in DB');
-      process.exit(1);
+      process.exit();
     }
 
-    user.Password = Users.hashPassword(NEW_PLAIN_PASSWORD);
-
+    const hashed = bcrypt.hashSync('Almost!', 10);
+    user.Password = hashed;
     await user.save();
-    console.log(`Password for "Mushroom" rest to "${NEW_PLAIN_PASSWORD}"`);
-    process.exit(0);
+
+    console.log(`Password for "Mushroom" rest to "Almost!"`);
+    mongoose.disconnect();
   } catch (err) {
     console.error('Error resetting password:', err);
-    process.exit(1);
+    mongoose.disconnect();
   }
-}
+})();
