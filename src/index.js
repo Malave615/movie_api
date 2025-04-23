@@ -5,6 +5,7 @@ const morgan = require('morgan');
 const fs = require('fs');
 const path = require('path');
 const uuid = require('uuid');
+const jwt = require('jsonwebtoken');
 
 const mongoose = require('mongoose');
 
@@ -59,7 +60,6 @@ app.options('/movies', cors(corsOptions));
 const { check, validationResult } = require('express-validator');
 
 const passport = require('passport');
-const auth = require('./auth')(app);
 require('./passport');
 const Models = require('./models.js');
 
@@ -250,19 +250,26 @@ app.get(
  * If the login is successful, it returns a 201 status code.
  * If there is an error, it returns a 500 status code.
  */
-app.post(
-  '/login',
-  passport.authenticate('local', { session: false }),
-  async (req, res) => {
-    try {
-      const token = auth.generateJWT(req.user);
-      return res.status(201).json({ user: req.user, token });
-    } catch (err) {
-      console.error(err);
-      res.status(500).send(`Error: ${err}`);
+app.post('/login', (req, res, next) => {
+  passport.authenticate('local', { session: false }, (error, user, info) => {
+    if (error || !user) {
+      return res.status(401).json({
+        message: 'Login failed',
+        user,
+        error,
+      });
     }
-  },
-);
+    req.login(user, { session: false }, (err) => {
+      if (err) {
+        res.send(err);
+      }
+      const token = jwt.sign(user.toJSON(), 'your_jwt_secret', {
+        expiresIn: '7d',
+      });
+      return res.json({ user, token });
+    });
+  })(req, res, next);
+});
 
 /**
  * Register a new user
