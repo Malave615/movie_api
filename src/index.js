@@ -489,6 +489,43 @@ app.put(
   },
 );
 
+/**
+ * Reset Password
+ * @method POST
+ * @param {string} path - /users/reset-password
+ * @param {Function} callback - async (req, res)
+ * @returns {Object} - JSON response confirming the request
+ * @description This function resets a user's password by sending a password reset token to their email.
+ */
+app.post('/users/reset-password', async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).send('Email is required');
+  }
+
+  try {
+    const user = await Users.findOne({ Email: email });
+
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    const resetToken = jwt.sign(
+      { email: user.Email, _id: user._id },
+      process.env.YOUR_JWT_SECRET,
+      { expiresIn: '1h' },
+    );
+
+    console.log(`Password reset token for ${email}: ${resetToken}`);
+
+    res.status(200).send('Password reset token sent to your email');
+  } catch (error) {
+    console.error('Error resetting password:', error);
+    res.status(500).send(`Error: ${error}`);
+  }
+});
+
 app.use(express.static('public'));
 
 app.use((err, req, res, next) => {
