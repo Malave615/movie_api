@@ -14,7 +14,9 @@ const MONGO_URI = process.env.CONNECTION_URI;
 
     const users = await User.find();
     for (const user of users) {
-      if (!user.Password.startsWith('$2')) {
+      if (!user.Password) {
+        console.warn(`⚠️ No password for user: ${user.Username}`);
+      } else if (!user.Password.startsWith('$2')) {
         const hashed = bcrypt.hashSync(user.Password, 10);
         user.Password = hashed;
         await user.save();
